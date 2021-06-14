@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=net.etfbl.pisio.kafkaconfiguration.KafkaAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=net.etfbl.pisio.kafkaconfiguration.KafkaProducerAutoConfiguration, net.etfbl.pisio.kafkaconfiguration.KafkaConsumerAutoConfiguration
