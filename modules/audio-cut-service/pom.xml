@@ -39,6 +39,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>net.etfbl</groupId>
+            <artifactId>kafka-configuration</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
