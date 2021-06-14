@@ -9,6 +9,5 @@ public class AudioCutKafkaHandler {
     @KafkaListener(topics = "mcut")
     public void listen(String in) {
         System.out.println(in);
-
     }
 }
