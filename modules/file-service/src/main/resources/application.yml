@@ -1,0 +1,23 @@
+server:
+  port: 11000
+  tomcat:
+    connection-timeout: 100000
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 20KB
+      max-file-size: 100MB
+      max-request-size: 115MB
+
+files:
+  path: /home/bojanbulatovic/Desktop
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+files:
+  path: /music

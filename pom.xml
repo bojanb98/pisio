@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.etfbl</groupId>
+    <artifactId>pisio</artifactId>
+    <version>0.1.0</version>
+    <modules>
+        <module>modules/auth-service</module>
+        <module>modules/file-service</module>
+        <module>modules/default-service-configuration</module>
+        <module>modules/communication-service</module>
+        <module>modules/auth-filter</module>
+        <module>modules/audio-cut-service</module>
+    </modules>
+    <packaging>pom</packaging>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <spring.boot.version>2.4.5</spring.boot.version>
+        <spring.profiles.active>default</spring.profiles.active>
+
+        <!-- Docker -->
+        <docker.image.name>bojanbulatovic/${project.artifactId}</docker.image.name>
+        <docker.image.alias>${project.artifactId}</docker.image.alias>
+        <docker.file.dir>${project.basedir}/src/main/docker</docker.file.dir>
+        <docker.skip.build>true</docker.skip.build>
+        <docker.skip.push>true</docker.skip.push>
+
+        <!-- Kubernetes -->
+        <k8s.file.dir>${project.basedir}/src/main/k8s</k8s.file.dir>
+        <k8s.namespace>default</k8s.namespace>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <executions>
+                        <!-- disable standard deploy -->
+                        <execution>
+                            <id>default-deploy</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Docker -->
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.36.0</version>
+                    <executions>
+                        <execution>
+                            <id>build</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>push</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>push</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <registry>docker.io</registry>
+                        <skip>${docker.skip.build}</skip>
+                        <skipPush>${docker.skip.push}</skipPush>
+                        <verbose>true</verbose>
+                        <images>
+                            <image>
+                                <name>${docker.image.name}</name>
+                                <alias>${docker.image.alias}</alias>
+                                <build>
+                                    <dockerFileDir>${docker.file.dir}</dockerFileDir>
+                                    <assembly>
+                                        <descriptorRef>artifact</descriptorRef>
+                                    </assembly>
+                                </build>
+                                <run>
+                                    <namingStrategy>alias</namingStrategy>
+                                </run>
+                            </image>
+                        </images>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>k8s_resources</id>
+                            <phase>generate-resources</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <resources>
+                                    <resource>
+                                        <filtering>true</filtering>
+                                        <directory>${k8s.file.dir}</directory>
+                                        <includes>
+                                            <include>*.yml</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                                <outputDirectory>${maven.multiModuleProjectDirectory}/k8s</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>k8s</id>
+            <properties>
+                <spring.profiles.active>docker</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>

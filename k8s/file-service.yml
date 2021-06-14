@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-service
+  namespace: default
+spec:
+  selector:
+    app: file-service
+  ports:
+    - port: 11000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-service
+  namespace: default
+  labels:
+    app: file-service
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: file-service
+  template:
+    metadata:
+      labels:
+        app: file-service
+    spec:
+      containers:
+        - name: file-service
+          image: "bojanbulatovic/file-service:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 11000
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 11000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+            successThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 11000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /music
+              name: file-service-persistent-storage
+      volumes:
+        - name: file-service-persistent-storage
+          persistentVolumeClaim:
+            claimName: music-pv-claim

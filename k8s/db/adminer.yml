@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: adminer
+  namespace: default
+spec:
+  selector:
+    app: adminer
+  ports:
+    - port: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminer
+  namespace: default
+  labels:
+    app: adminer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminer    # indicates which Pods (with which labeles) need be handled by this Deployment
+  template:
+    metadata:         # indicates the metadata that will be added to each Pod
+      labels:
+        app: adminer
+    spec:
+      containers:     # defines a running container inside the Pod
+        - name: adminer
+          image: adminer:latest
+          ports:
+            - containerPort: 8080   # which port of the container is exposed to the Pod
+          env:
+            - name: ADMINER_DESIGN
+              value: pepa-linha
+            - name: ADMINER_DEFAULT_SERVER
+              value: mysql

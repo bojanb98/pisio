@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-service
+  namespace: ${k8s.namespace}
+spec:
+  selector:
+    app: file-service
+  ports:
+    - port: 11000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-service
+  namespace: ${k8s.namespace}
+  labels:
+    app: file-service
+spec:
+  replicas: ${file-service.replicas}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: file-service
+  template:
+    metadata:
+      labels:
+        app: file-service
+    spec:
+      containers:
+        - name: file-service
+          image: "${docker.image.name}:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 11000
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "${spring.profiles.active}"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 11000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+            successThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 11000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /music
+              name: file-service-persistent-storage
+      volumes:
+        - name: file-service-persistent-storage
+          persistentVolumeClaim:
+            claimName: music-pv-claim
