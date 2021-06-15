@@ -6,7 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 @Configuration
 public class AudioCutKafkaHandler {
 
-    @KafkaListener(topics = "mcut", groupId = "mcut_group_1")
+    @KafkaListener(topics = "mcut", groupId = "group_id")
     public void listen(String in) {
         System.out.println(in);
     }
