@@ -35,6 +35,12 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>net.etfbl</groupId>
+            <artifactId>kafka-configuration</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- JSON Dependency -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
