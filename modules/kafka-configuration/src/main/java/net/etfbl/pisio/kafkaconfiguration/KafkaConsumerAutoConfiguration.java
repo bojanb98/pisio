@@ -1,6 +1,6 @@
 package net.etfbl.pisio.kafkaconfiguration;
 
-import net.etfbl.pisio.kafkaconfiguration.model.FileJob;
+import net.etfbl.pisio.kafkaconfiguration.model.FileJobData;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -24,21 +24,22 @@ public class KafkaConsumerAutoConfiguration {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "my-cluster-kafka-bootstrap.kafka:9092");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "json");
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, FileJob> consumerFactory() {
+    public ConsumerFactory<String, FileJobData> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(
                 consumerConfigs(),
                 new StringDeserializer(),
-                new JsonDeserializer<>(FileJob.class));
+                new JsonDeserializer<>(FileJobData.class));
     }
 
     @Bean
-    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, FileJob>>
+    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, FileJobData>>
     kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String , FileJob> factory =
+        ConcurrentKafkaListenerContainerFactory<String , FileJobData> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;

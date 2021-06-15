@@ -1,6 +1,6 @@
 package net.etfbl.pisio.kafkaconfiguration;
 
-import net.etfbl.pisio.kafkaconfiguration.model.FileJob;
+import net.etfbl.pisio.kafkaconfiguration.model.FileJobData;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -28,12 +28,12 @@ public class KafkaProducerAutoConfiguration {
     }
 
     @Bean
-    public ProducerFactory<String, FileJob> producerFactory() {
+    public ProducerFactory<String, FileJobData> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, FileJob> kafkaTemplate() {
+    public KafkaTemplate<String, FileJobData> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
