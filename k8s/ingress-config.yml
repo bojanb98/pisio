@@ -29,11 +29,3 @@ spec:
                 name: file-service
                 port:
                   number: 11000
-
-          - path: /audio
-            pathType: Prefix
-            backend:
-              service:
-                name: audio-cut-service
-                port:
-                  number: 12000
