@@ -10,10 +10,11 @@
     <modules>
         <module>modules/auth-service</module>
         <module>modules/file-service</module>
-        <module>modules/default-service-configuration</module>
+        <module>modules/swagger-configuration</module>
         <module>modules/communication-service</module>
         <module>modules/auth-filter</module>
         <module>modules/audio-cut-service</module>
+        <module>modules/kafka-configuration</module>
     </modules>
     <packaging>pom</packaging>
 
