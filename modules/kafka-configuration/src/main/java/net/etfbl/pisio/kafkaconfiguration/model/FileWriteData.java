@@ -11,5 +11,7 @@ public class FileWriteData {
 
     private String jobId;
 
+    private String fileName;
+
     private byte[] data;
 }

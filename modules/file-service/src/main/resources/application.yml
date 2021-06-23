@@ -1,7 +1,5 @@
 server:
-  port: 11000
-  tomcat:
-    connection-timeout: 100000
+  port: ${port:8080}
 
 spring:
   servlet:
@@ -20,4 +18,4 @@ spring:
     activate:
       on-profile: docker
 files:
-  path: /music
+  path: /images
