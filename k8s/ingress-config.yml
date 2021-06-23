@@ -4,6 +4,8 @@ metadata:
   name: pisio-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
     - http:
@@ -14,7 +16,7 @@ spec:
               service:
                 name: auth-service
                 port:
-                  number: 10000
+                  number: 8080
           - path: /adminer
             pathType: Prefix
             backend:
@@ -28,4 +30,4 @@ spec:
               service:
                 name: file-service
                 port:
-                  number: 11000
+                  number: 8080

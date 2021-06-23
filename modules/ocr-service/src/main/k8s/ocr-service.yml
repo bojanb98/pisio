@@ -1,49 +1,49 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: file-service
-  namespace: default
+  name: ocr-service
+  namespace: ${k8s.namespace}
 spec:
   selector:
-    app: file-service
+    app: ocr-service
   ports:
-    - port: 11000
+    - port: 8080
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: file-service
-  namespace: default
+  name: ocr-service
+  namespace: ${k8s.namespace}
   labels:
-    app: file-service
+    app: ocr-service
 spec:
-  replicas: 1
+  replicas: ${ocr-service.replicas}
   strategy:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: file-service
+      app: ocr-service
   template:
     metadata:
       labels:
-        app: file-service
+        app: ocr-service
     spec:
       containers:
-        - name: file-service
-          image: "bojanbulatovic/file-service:latest"
+        - name: ocr-service
+          image: "${docker.image.name}:latest"
           imagePullPolicy: Always
           ports:
-            - containerPort: 11000
+            - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "docker"
+              value: "${spring.profiles.active}"
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 11000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
@@ -52,15 +52,8 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 11000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
             failureThreshold: 3
-          volumeMounts:
-            - mountPath: /images
-              name: file-service-persistent-storage
-      volumes:
-        - name: file-service-persistent-storage
-          persistentVolumeClaim:
-            claimName: music-pv-claim

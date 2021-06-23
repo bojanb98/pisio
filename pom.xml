@@ -15,6 +15,7 @@
         <module>modules/auth-filter</module>
         <module>modules/audio-cut-service</module>
         <module>modules/kafka-configuration</module>
+        <module>modules/ocr-service</module>
     </modules>
     <packaging>pom</packaging>
 
