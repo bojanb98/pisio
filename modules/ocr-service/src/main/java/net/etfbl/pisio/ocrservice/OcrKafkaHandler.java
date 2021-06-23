@@ -13,6 +13,7 @@ public class OcrKafkaHandler {
 
     @KafkaListener(topics = "images", groupId = "ocr")
     public void handleImages(ImageJobData imageJobData) {
-
+        String result = ocrService.doOcr(imageJobData.getImagesBytes());
+        System.out.println(result);
     }
 }

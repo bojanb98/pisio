@@ -2,6 +2,8 @@ package net.etfbl.pisio.kafkaconfiguration.model;
 
 import lombok.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -11,5 +13,5 @@ public class ImageJobData {
 
     private String jobId;
 
-    private byte[] fileBytes;
+    private List<byte[]> imagesBytes;
 }
