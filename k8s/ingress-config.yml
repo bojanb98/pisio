@@ -16,7 +16,7 @@ spec:
               service:
                 name: auth-service
                 port:
-                  number: 8080
+                  number: 10000
           - path: /adminer
             pathType: Prefix
             backend:
@@ -30,4 +30,4 @@ spec:
               service:
                 name: file-service
                 port:
-                  number: 8080
+                  number: 11000
