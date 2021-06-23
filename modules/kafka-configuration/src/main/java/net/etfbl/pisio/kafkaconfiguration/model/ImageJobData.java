@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-public class FileJobData {
+public class ImageJobData {
 
     private String jobId;
 
