@@ -16,14 +16,14 @@ import java.util.Map;
 @AllArgsConstructor
 public class KafkaConsumerAutoConfiguration {
 
-    private final KafkaProperties kafkaProperties;
-
-    @Bean
-    public KafkaConsumerConfig consumerConfigs() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getKafkaUrl());
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        return new KafkaConsumerConfig(props);
-    }
+//    private final KafkaProperties kafkaProperties;
+//
+//    @Bean
+//    public KafkaConsumerConfig consumerConfigs() {
+//        Map<String, Object> props = new HashMap<>();
+//        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getKafkaUrl());
+//        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+//        return new KafkaConsumerConfig(props);
+//    }
 }

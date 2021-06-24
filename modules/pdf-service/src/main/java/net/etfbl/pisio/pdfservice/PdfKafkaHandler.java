@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import net.etfbl.pisio.kafkaconfiguration.model.FileWriteData;
 import net.etfbl.pisio.kafkaconfiguration.model.StringJobData;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @Configuration
 @AllArgsConstructor
+@EnableKafka
 public class PdfKafkaHandler {
 
     private final PdfService pdfService;

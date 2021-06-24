@@ -16,40 +16,40 @@ import java.util.Map;
 @AllArgsConstructor
 public class KafkaAdminAutoConfiguration {
 
-    private final KafkaProperties kafkaProperties;
-
-    @Bean
-    public KafkaAdmin kafkaAdmin() {
-        Map<String, Object> configs = new HashMap<>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getKafkaUrl());
-        return new KafkaAdmin(configs);
-    }
-
-    @Bean
-    public NewTopic imagesTopic() {
-        return TopicBuilder
-                .name("images")
-                .build();
-    }
-
-    @Bean
-    public NewTopic pdfTopic() {
-        return TopicBuilder
-                .name("pdf")
-                .build();
-    }
-
-    @Bean
-    public NewTopic fileTopic() {
-        return TopicBuilder
-                .name("destFile")
-                .build();
-    }
-
-    @Bean
-    public NewTopic communicationTopic() {
-        return TopicBuilder
-                .name("communication")
-                .build();
-    }
+//    private final KafkaProperties kafkaProperties;
+//
+//    @Bean
+//    public KafkaAdmin kafkaAdmin() {
+//        Map<String, Object> configs = new HashMap<>();
+//        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getKafkaUrl());
+//        return new KafkaAdmin(configs);
+//    }
+//
+//    @Bean
+//    public NewTopic imagesTopic() {
+//        return TopicBuilder
+//                .name("images")
+//                .build();
+//    }
+//
+//    @Bean
+//    public NewTopic pdfTopic() {
+//        return TopicBuilder
+//                .name("pdf")
+//                .build();
+//    }
+//
+//    @Bean
+//    public NewTopic fileTopic() {
+//        return TopicBuilder
+//                .name("destFile")
+//                .build();
+//    }
+//
+//    @Bean
+//    public NewTopic communicationTopic() {
+//        return TopicBuilder
+//                .name("communication")
+//                .build();
+//    }
 }

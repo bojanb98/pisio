@@ -8,6 +8,16 @@ spring:
       file-size-threshold: 20KB
       max-file-size: 100MB
       max-request-size: 115MB
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "net.etfbl.pisio.kafkaconfiguration.model"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    bootstrap-servers: pop-os.localdomain:9092
 
 files:
   path: /home/bojanbulatovic/Desktop

@@ -10,17 +10,34 @@ import java.util.List;
 @Service
 public class PdfService {
 
-    public byte[] createPdfFromStrings(List<String> stringList) throws DocumentException {
+    public byte[] createPdfFromStrings(List<String> content) throws DocumentException {
         Document document = new Document();
-        PdfWriter pdfWriter = PdfWriter.getInstance(document, new ByteArrayOutputStream());
-
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, bos);
         document.open();
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        for (String imageText : stringList) {
-            Chunk chunk = new Chunk(imageText, font);
-            document.add(chunk);
-        }
+        this.addContent(document, content);
         document.close();
-        return pdfWriter.getDirectContentUnder().getInternalBuffer().getBuffer();
+        return bos.toByteArray();
+    }
+
+    private void addContent(Document document, List<String> content) throws DocumentException {
+        Font chapterFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, Font.BOLD, BaseColor.BLACK);
+        Font textFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+        int i = 0;
+        for (String imageText : content) {
+            Chapter chapter = createNewChapter(++i, chapterFont);
+            String[] textParts = imageText.split("\n");
+            for (String part : textParts) {
+                Paragraph paragraph = new Paragraph(part, textFont);
+                chapter.add(paragraph);
+            }
+            document.add(chapter);
+        }
+    }
+
+    private Chapter createNewChapter(int chapterNum, Font chapterFont) {
+        Anchor anchor = new Anchor("Image", chapterFont);
+        anchor.setName("Image " + chapterNum);
+        return new Chapter(new Paragraph(anchor), chapterNum);
     }
 }
