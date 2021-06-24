@@ -25,9 +25,6 @@ public class FileAccessService {
     private final FileProperties fileProperties;
     private final KafkaTemplate<String, ImageJobData> kafkaTemplate;
 
-    public Resource getFileResource(String jobId) {
-        return new FileSystemResource(fileProperties.getPath().resolve(jobId));
-    }
 
     public String uploadFiles(MultipartFile[] files) {
         String jobId = UUID.randomUUID().toString();
