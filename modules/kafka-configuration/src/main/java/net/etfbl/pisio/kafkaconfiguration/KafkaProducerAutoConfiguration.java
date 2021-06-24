@@ -1,8 +1,10 @@
 package net.etfbl.pisio.kafkaconfiguration;
 
 import lombok.AllArgsConstructor;
+import net.etfbl.pisio.kafkaconfiguration.model.FileWriteData;
 import net.etfbl.pisio.kafkaconfiguration.model.ImageJobData;
 import net.etfbl.pisio.kafkaconfiguration.model.KafkaProperties;
+import net.etfbl.pisio.kafkaconfiguration.model.StringJobData;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
@@ -32,13 +33,19 @@ public class KafkaProducerAutoConfiguration {
         return props;
     }
 
+
     @Bean
-    public ProducerFactory<String, ImageJobData> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    public KafkaTemplate<String, ImageJobData> kafkaImageJobTemplate() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(producerConfigs()));
     }
 
     @Bean
-    public KafkaTemplate<String, ImageJobData> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, FileWriteData> kafkaFileWriteTemplate() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(producerConfigs()));
+    }
+
+    @Bean
+    public KafkaTemplate<String, StringJobData> kafkaStringJobTemplate() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(producerConfigs()));
     }
 }

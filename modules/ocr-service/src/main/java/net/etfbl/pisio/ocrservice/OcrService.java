@@ -8,27 +8,26 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class OcrService {
 
-    private static final String OCR_PARAMS_PATH = "src/main/resources/eng.traineddata";
-
     private final Tesseract tesseract;
 
     public OcrService() {
         tesseract = new Tesseract();
-        tesseract.setDatapath(OCR_PARAMS_PATH);
+        tesseract.setDatapath(Objects.requireNonNull(OcrService.class.getResource("tessdata")).getPath());
         tesseract.setLanguage("eng");
         tesseract.setPageSegMode(1);
         tesseract.setOcrEngineMode(1);
     }
 
-    public String doOcr(List<byte[]> images) {
+    public List<String> doOcr(List<byte[]> images) {
         return images.stream()
                 .map(this::doSingleImageOcr)
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.toList());
     }
 
     private String doSingleImageOcr(byte[] imageBytes) {

@@ -2,6 +2,8 @@ package net.etfbl.pisio.kafkaconfiguration.model;
 
 import lombok.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -11,5 +13,5 @@ public class StringJobData {
 
     private String jobId;
 
-    private String[] imageTextArray;
+    private List<String> imagesText;
 }
