@@ -2,8 +2,9 @@ package net.etfbl.pisio.pdfservice;
 
 import net.etfbl.pisio.kafkaconfiguration.model.FileWriteData;
 import net.etfbl.pisio.kafkaconfiguration.model.StringJobData;
+import net.etfbl.pisio.kafkaconfiguration.model.config.KafkaConsumerConfig;
+import net.etfbl.pisio.kafkaconfiguration.model.config.KafkaProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -23,10 +24,10 @@ public class PdfKafkaConfiguration {
     private final Map<String, Object> consumerConfigs;
     private final Map<String, Object> producerConfigs;
 
-    public PdfKafkaConfiguration(@Qualifier("kafkaConsumerConfigs") Map<String, Object> consumerConfigs,
-                                 @Qualifier("kafkaProducerConfigs") Map<String, Object> producerConfigs) {
-        this.consumerConfigs = consumerConfigs;
-        this.producerConfigs = producerConfigs;
+    public PdfKafkaConfiguration(KafkaConsumerConfig consumerConfigs,
+                                 KafkaProducerConfig producerConfigs) {
+        this.consumerConfigs = consumerConfigs.getConfigMap();
+        this.producerConfigs = producerConfigs.getConfigMap();
     }
 
     @Bean
@@ -38,9 +39,8 @@ public class PdfKafkaConfiguration {
     }
 
     @Bean
-    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, StringJobData>>
-    kafkaImageListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String , StringJobData> factory =
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, StringJobData>> kafkaImageListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, StringJobData> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(stringConsumerFactory());
         return factory;

@@ -2,8 +2,9 @@ package net.etfbl.pisio.fileservice.config;
 
 import net.etfbl.pisio.kafkaconfiguration.model.FileWriteData;
 import net.etfbl.pisio.kafkaconfiguration.model.ImageJobData;
+import net.etfbl.pisio.kafkaconfiguration.model.config.KafkaConsumerConfig;
+import net.etfbl.pisio.kafkaconfiguration.model.config.KafkaProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -23,10 +24,10 @@ public class FileKafkaConfig {
     private final Map<String, Object> consumerConfigs;
     private final Map<String, Object> producerConfigs;
 
-    public FileKafkaConfig(@Qualifier("kafkaConsumerConfigs") Map<String, Object> consumerConfigs,
-                           @Qualifier("kafkaProducerConfigs") Map<String, Object> producerConfigs) {
-        this.consumerConfigs = consumerConfigs;
-        this.producerConfigs = producerConfigs;
+    public FileKafkaConfig(KafkaConsumerConfig consumerConfigs,
+                           KafkaProducerConfig producerConfigs) {
+        this.consumerConfigs = consumerConfigs.getConfigMap();
+        this.producerConfigs = producerConfigs.getConfigMap();
     }
 
     @Bean
@@ -38,8 +39,7 @@ public class FileKafkaConfig {
     }
 
     @Bean
-    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, FileWriteData>>
-    kafkaImageListenerContainerFactory() {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, FileWriteData>> kafkaImageListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, FileWriteData> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(imageConsumerFactory());

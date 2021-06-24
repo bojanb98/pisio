@@ -1,11 +1,8 @@
 package net.etfbl.pisio.fileservice.service;
 
 import lombok.AllArgsConstructor;
-import net.etfbl.pisio.fileservice.config.FileProperties;
 import net.etfbl.pisio.fileservice.model.ByteExtractionException;
 import net.etfbl.pisio.kafkaconfiguration.model.ImageJobData;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +19,6 @@ public class FileAccessService {
 
     private static final String IMAGES_TOPIC = "images";
 
-    private final FileProperties fileProperties;
     private final KafkaTemplate<String, ImageJobData> kafkaTemplate;
 
 
