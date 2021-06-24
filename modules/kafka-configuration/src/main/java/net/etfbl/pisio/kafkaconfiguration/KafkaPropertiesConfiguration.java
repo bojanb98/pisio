@@ -17,6 +17,6 @@ public class KafkaPropertiesConfiguration {
     @Bean
     @Profile("default")
     public KafkaProperties localKafkaProperties() {
-        return new KafkaProperties("localhost:9092");
+        return new KafkaProperties("pop-os.localdomain:9092");
     }
 }
