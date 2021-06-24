@@ -19,6 +19,7 @@ public class OcrKafkaHandler {
     @KafkaListener(topics = "images", groupId = "ocr")
     public void handleImages(ImageJobData imageJobData) {
         List<String> result = ocrService.doOcr(imageJobData.getImagesBytes());
+        System.out.println(String.join("\n", result));
         StringJobData stringJobData = new StringJobData(imageJobData.getJobId(), result);
         kafkaTemplate.send("pdf", stringJobData);
     }

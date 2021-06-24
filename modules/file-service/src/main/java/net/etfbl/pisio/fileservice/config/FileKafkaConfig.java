@@ -16,38 +16,23 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import java.util.Map;
-
 @Configuration
 public class FileKafkaConfig {
 
-    private final Map<String, Object> consumerConfigs;
-    private final Map<String, Object> producerConfigs;
-
-    public FileKafkaConfig(KafkaConsumerConfig consumerConfigs,
-                           KafkaProducerConfig producerConfigs) {
-        this.consumerConfigs = consumerConfigs.getConfigMap();
-        this.producerConfigs = producerConfigs.getConfigMap();
-    }
-
     @Bean
-    public ConsumerFactory<String, FileWriteData> imageConsumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(
-                consumerConfigs,
-                new StringDeserializer(),
-                new JsonDeserializer<>(FileWriteData.class));
-    }
-
-    @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, FileWriteData>> kafkaImageListenerContainerFactory() {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, FileWriteData>> kafkaFileWriteListenerContainerFactory(KafkaConsumerConfig kafkaConsumerConfig) {
         ConcurrentKafkaListenerContainerFactory<String, FileWriteData> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(imageConsumerFactory());
+        ConsumerFactory<String, FileWriteData> consumerFactory = new DefaultKafkaConsumerFactory<>(
+                kafkaConsumerConfig.getConfigMap(),
+                new StringDeserializer(),
+                new JsonDeserializer<>(FileWriteData.class));
+        factory.setConsumerFactory(consumerFactory);
         return factory;
     }
 
     @Bean
-    public KafkaTemplate<String, ImageJobData> kafkaStringJobTemplate() {
-        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(producerConfigs));
+    public KafkaTemplate<String, ImageJobData> kafkaImageJobTemplate(KafkaProducerConfig kafkaProducerConfig) {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(kafkaProducerConfig.getConfigMap()));
     }
 }

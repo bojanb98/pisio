@@ -16,38 +16,23 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import java.util.Map;
-
 @Configuration
 public class PdfKafkaConfiguration {
 
-    private final Map<String, Object> consumerConfigs;
-    private final Map<String, Object> producerConfigs;
-
-    public PdfKafkaConfiguration(KafkaConsumerConfig consumerConfigs,
-                                 KafkaProducerConfig producerConfigs) {
-        this.consumerConfigs = consumerConfigs.getConfigMap();
-        this.producerConfigs = producerConfigs.getConfigMap();
-    }
-
     @Bean
-    public ConsumerFactory<String, StringJobData> stringConsumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(
-                consumerConfigs,
-                new StringDeserializer(),
-                new JsonDeserializer<>(StringJobData.class));
-    }
-
-    @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, StringJobData>> kafkaImageListenerContainerFactory() {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, StringJobData>> kafkaStringListenerContainerFactory(KafkaConsumerConfig kafkaConsumerConfig) {
         ConcurrentKafkaListenerContainerFactory<String, StringJobData> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(stringConsumerFactory());
+        ConsumerFactory<String, StringJobData> consumerFactory = new DefaultKafkaConsumerFactory<>(
+                kafkaConsumerConfig.getConfigMap(),
+                new StringDeserializer(),
+                new JsonDeserializer<>(StringJobData.class));
+        factory.setConsumerFactory(consumerFactory);
         return factory;
     }
 
     @Bean
-    public KafkaTemplate<String, FileWriteData> kafkaStringJobTemplate() {
-        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(producerConfigs));
+    public KafkaTemplate<String, FileWriteData> kafkaFileWriteTemplate(KafkaProducerConfig kafkaProducerConfig) {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(kafkaProducerConfig.getConfigMap()));
     }
 }
