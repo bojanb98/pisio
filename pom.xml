@@ -13,7 +13,6 @@
         <module>modules/swagger-configuration</module>
         <module>modules/communication-service</module>
         <module>modules/auth-filter</module>
-        <module>modules/audio-cut-service</module>
         <module>modules/kafka-configuration</module>
         <module>modules/ocr-service</module>
     </modules>

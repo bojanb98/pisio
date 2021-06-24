@@ -7,7 +7,7 @@ spec:
   selector:
     app: file-service
   ports:
-    - port: 11000
+    - port: 8080
 
 ---
 apiVersion: apps/v1
@@ -36,14 +36,14 @@ spec:
           image: "bojanbulatovic/file-service:latest"
           imagePullPolicy: Always
           ports:
-            - containerPort: 11000
+            - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "docker"
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 11000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
@@ -52,7 +52,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 11000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10

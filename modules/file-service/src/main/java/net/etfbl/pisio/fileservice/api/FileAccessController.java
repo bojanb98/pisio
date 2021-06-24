@@ -27,8 +27,8 @@ public class FileAccessController {
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
-    public FileJob uploadFile(@RequestParam("file") MultipartFile file) {
-        String jobId = fileAccessService.uploadFile(file);
+    public FileJob uploadFile(@RequestParam("files") MultipartFile[] files) {
+        String jobId = fileAccessService.uploadFiles(files);
         if (jobId == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
