@@ -1,5 +1,6 @@
 package net.etfbl.pisio.pdfservice;
 
+import com.itextpdf.text.DocumentException;
 import lombok.AllArgsConstructor;
 import net.etfbl.pisio.kafkaconfiguration.model.FileWriteData;
 import net.etfbl.pisio.kafkaconfiguration.model.StringJobData;
@@ -15,7 +16,7 @@ public class PdfKafkaHandler {
     private final KafkaTemplate<String, FileWriteData> kafkaTemplate;
 
     @KafkaListener(topics = "pdf", groupId = "pdf_creator")
-    public void handleString(StringJobData stringJobData) {
+    public void handleString(StringJobData stringJobData) throws DocumentException {
         byte[] pdfBytes = pdfService.createPdfFromStrings(stringJobData.getImagesText());
         FileWriteData fileWriteData = new FileWriteData(stringJobData.getJobId(), "images.pdf", pdfBytes);
         kafkaTemplate.send("destFile", fileWriteData);
