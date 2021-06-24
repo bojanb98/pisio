@@ -27,5 +27,7 @@ spring:
   config:
     activate:
       on-profile: docker
+  kafka:
+    bootstrap-servers: my-cluster-kafka-bootstrap.kafka:9092
 files:
   path: /images

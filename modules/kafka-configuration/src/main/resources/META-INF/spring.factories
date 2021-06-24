@@ -1,5 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  net.etfbl.pisio.kafkaconfiguration.KafkaProducerAutoConfiguration, \
-  net.etfbl.pisio.kafkaconfiguration.KafkaConsumerAutoConfiguration, \
-  net.etfbl.pisio.kafkaconfiguration.KafkaAdminAutoConfiguration, \
-  net.etfbl.pisio.kafkaconfiguration.KafkaPropertiesConfiguration
