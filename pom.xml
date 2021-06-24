@@ -15,6 +15,7 @@
         <module>modules/auth-filter</module>
         <module>modules/kafka-configuration</module>
         <module>modules/ocr-service</module>
+        <module>modules/pdf-service</module>
     </modules>
     <packaging>pom</packaging>
 
