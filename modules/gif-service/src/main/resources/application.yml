@@ -1,5 +1,5 @@
 server:
-  port: ${port:12000}
+  port: ${port:14000}
 
 spring:
   kafka:
