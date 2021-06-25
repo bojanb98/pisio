@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gif-service
+  namespace: ${k8s.namespace}
+spec:
+  selector:
+    app: gif-service
+  ports:
+    - port: 14000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gif-service
+  namespace: ${k8s.namespace}
+  labels:
+    app: gif-service
+spec:
+  replicas: ${gif-service.replicas}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: gif-service
+  template:
+    metadata:
+      labels:
+        app: gif-service
+    spec:
+      containers:
+        - name: gif-service
+          image: "${docker.image.name}:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 14000
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "${spring.profiles.active}"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 14000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+            successThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 14000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
