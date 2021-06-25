@@ -32,13 +32,15 @@ public class FileZipService {
 
     private void createZipEntry(Path targetDir) {
         String zipFilePath = targetDir.resolve(TARGET_FILENAME).toFile().getAbsolutePath();
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFilePath))) {
+        try {
             List<Path> files = Files.list(targetDir).collect(Collectors.toList());
-            for (Path targetFile : files) {
-                zos.putNextEntry(new ZipEntry(targetFile.toString()));
-                byte[] bytes = Files.readAllBytes(targetFile);
-                zos.write(bytes, 0, bytes.length);
-                zos.closeEntry();
+            try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFilePath))) {
+                for (Path targetFile : files) {
+                    zos.putNextEntry(new ZipEntry(targetFile.getFileName().toString()));
+                    byte[] bytes = Files.readAllBytes(targetFile);
+                    zos.write(bytes, 0, bytes.length);
+                    zos.closeEntry();
+                }
             }
         } catch (IOException ex) {
             throw new ZipException(ex.getMessage(), ex);
