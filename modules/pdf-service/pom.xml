@@ -16,7 +16,6 @@
 
     <name>pdf-service</name>
 
-
     <properties>
         <pdf-service.replicas>1</pdf-service.replicas>
     </properties>

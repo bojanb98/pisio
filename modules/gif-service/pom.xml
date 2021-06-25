@@ -16,7 +16,7 @@
     <name>gif-service</name>
 
     <properties>
-        <ocr-service.replicas>1</ocr-service.replicas>
+        <gif-service.replicas>1</gif-service.replicas>
     </properties>
 
     <dependencies>

@@ -1,22 +1,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: file-service
+  name: pdf-service
   namespace: default
 spec:
   selector:
-    app: file-service
+    app: pdf-service
   ports:
-    - port: 11000
+    - port: 13000
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: file-service
+  name: pdf-service
   namespace: default
   labels:
-    app: file-service
+    app: pdf-service
 spec:
   replicas: 1
   strategy:
@@ -25,25 +25,25 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: file-service
+      app: pdf-service
   template:
     metadata:
       labels:
-        app: file-service
+        app: pdf-service
     spec:
       containers:
-        - name: file-service
-          image: "bojanbulatovic/file-service:latest"
+        - name: pdf-service
+          image: "bojanbulatovic/pdf-service:latest"
           imagePullPolicy: Always
           ports:
-            - containerPort: 11000
+            - containerPort: 13000
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "docker"
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 11000
+              port: 13000
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
@@ -52,15 +52,8 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 11000
+              port: 13000
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
             failureThreshold: 3
-          volumeMounts:
-            - mountPath: /images
-              name: file-service-persistent-storage
-      volumes:
-        - name: file-service-persistent-storage
-          persistentVolumeClaim:
-            claimName: music-pv-claim
