@@ -1,49 +1,49 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: file-service
+  name: gif-service
   namespace: ${k8s.namespace}
 spec:
   selector:
-    app: file-service
+    app: gif-service
   ports:
-    - port: 11000
+    - port: 14000
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: file-service
+  name: gif-service
   namespace: ${k8s.namespace}
   labels:
-    app: file-service
+    app: gif-service
 spec:
-  replicas: ${file-service.replicas}
+  replicas: ${gif-service.replicas}
   strategy:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: file-service
+      app: gif-service
   template:
     metadata:
       labels:
-        app: file-service
+        app: gif-service
     spec:
       containers:
-        - name: file-service
+        - name: gif-service
           image: "${docker.image.name}:latest"
           imagePullPolicy: Always
           ports:
-            - containerPort: 11000
+            - containerPort: 14000
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "${spring.profiles.active}"
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 11000
+              port: 14000
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
@@ -52,15 +52,8 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 11000
+              port: 14000
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
             failureThreshold: 3
-          volumeMounts:
-            - mountPath: /images
-              name: file-service-persistent-storage
-      volumes:
-        - name: file-service-persistent-storage
-          persistentVolumeClaim:
-            claimName: music-pv-claim
