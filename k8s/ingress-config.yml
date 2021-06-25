@@ -24,7 +24,7 @@ spec:
                 name: adminer
                 port:
                   number: 8080
-          - path: /music/(.*)
+          - path: /images/(.*)
             pathType: Prefix
             backend:
               service:

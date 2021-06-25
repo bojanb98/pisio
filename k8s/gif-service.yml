@@ -18,7 +18,7 @@ metadata:
   labels:
     app: gif-service
 spec:
-  replicas: ${gif-service.replicas}
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 1
