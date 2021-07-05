@@ -10,8 +10,8 @@ kubectl apply -f db/adminer.yml
 
 # Kafka
 kubectl create namespace kafka
-kubectl apply -f kafka/kafka-strimzi-init.yml
-kubectl apply -f kafka/kafka-cluster.yml
+kubectl apply -f kafka/kafka-strimzi-init.yml -n  kafka
+kubectl apply -f kafka/kafka-cluster.yml -n kafka
 kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka
 kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka
 

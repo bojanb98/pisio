@@ -39,7 +39,7 @@ spec:
             - containerPort: 11000
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "docker"
+              value: "default"
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
