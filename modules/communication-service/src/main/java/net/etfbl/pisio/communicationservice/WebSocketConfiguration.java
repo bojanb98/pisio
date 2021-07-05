@@ -48,14 +48,14 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
                     return false;
                 }
 
-                boolean success = tokenValidationService.isTokenValid(tickets.get(0));
+                String username = tokenValidationService.validateToken(tickets.get(0));
 
-                if (!success) {
+                if (username == null) {
                     return false;
                 }
 
 
-                map.put("username", "");
+                map.put("username", username);
                 serverHttpResponse.getHeaders().add(WEBSOCKET_TICKET_HEADER, tickets.get(0));
                 return true;
             }

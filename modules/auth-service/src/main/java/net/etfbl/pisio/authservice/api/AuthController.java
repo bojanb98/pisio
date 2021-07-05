@@ -35,8 +35,8 @@ public class AuthController {
     @PostMapping("/auth")
     @ResponseBody
     public TokenValidityResponse isTokenValid(@RequestBody @Validated TokenValidityRequest request) {
-        boolean isValid = jwtService.isTokenValid(request.getToken());
-        return new TokenValidityResponse(isValid);
+        String username = jwtService.isTokenValid(request.getToken());
+        return new TokenValidityResponse(username);
     }
 
     @PostMapping("/register")

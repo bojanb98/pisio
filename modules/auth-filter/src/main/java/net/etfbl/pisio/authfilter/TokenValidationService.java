@@ -18,7 +18,7 @@ public class TokenValidationService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public boolean isTokenValid(String token) throws IOException {
+    public String validateToken(String token) throws IOException {
         TokenValidityRequest tokenValidityRequest = new TokenValidityRequest(token);
         HttpEntity<String> requestBody = new HttpEntity<>(objectMapper.writeValueAsString(tokenValidityRequest));
 
@@ -26,11 +26,11 @@ public class TokenValidationService {
                 .postForEntity(remoteProperties.getPath(), requestBody, String.class);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            return false;
+            return null;
         }
 
         TokenValidityResponse validityResponse = objectMapper.readValue(responseEntity.getBody(), TokenValidityResponse.class);
 
-        return validityResponse.isTokenValid();
+        return validityResponse.getUsername();
     }
 }

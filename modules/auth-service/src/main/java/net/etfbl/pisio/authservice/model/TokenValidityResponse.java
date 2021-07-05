@@ -11,5 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TokenValidityResponse {
 
-    private boolean isTokenValid;
+    private String username;
+
+    public boolean isTokenValid() {
+        return username != null && !username.isBlank();
+    }
 }
