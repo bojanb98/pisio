@@ -7,13 +7,19 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-public class JobCompletionData {
+public class JobStatusData {
 
     private String jobId;
 
-    private JobPart completedPart;
+    private JobPart jobPart;
+
+    private PartStatus partStatus;
 
     public enum JobPart {
         OCR, PDF, GIF
+    }
+
+    public enum PartStatus {
+        IN_PROGRESS, DONE
     }
 }
