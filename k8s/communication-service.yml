@@ -1,22 +1,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ocr-service
+  name: communication-service
   namespace: default
 spec:
   selector:
-    app: ocr-service
+    app: communication-service
   ports:
-    - port: 12000
+    - port: 15000
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ocr-service
+  name: communication-service
   namespace: default
   labels:
-    app: ocr-service
+    app: communication-service
 spec:
   replicas: 1
   strategy:
@@ -25,25 +25,25 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: ocr-service
+      app: communication-service
   template:
     metadata:
       labels:
-        app: ocr-service
+        app: communication-service
     spec:
       containers:
-        - name: ocr-service
-          image: "bojanbulatovic/ocr-service:latest"
+        - name: communication-service
+          image: "bojanbulatovic/communication-service:latest"
           imagePullPolicy: Always
           ports:
-            - containerPort: 12000
+            - containerPort: 15000
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "docker"
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 12000
+              port: 15000
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
@@ -52,8 +52,15 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 12000
+              port: 15000
             initialDelaySeconds: 10
             periodSeconds: 20
             timeoutSeconds: 10
             failureThreshold: 3
+          volumeMounts:
+            - mountPath: /images
+              name: communication-service-persistent-storage
+      volumes:
+        - name: communication-service-persistent-storage
+          persistentVolumeClaim:
+            claimName: music-pv-claim

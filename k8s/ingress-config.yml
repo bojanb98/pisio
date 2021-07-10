@@ -6,6 +6,9 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
 spec:
   rules:
     - http:
@@ -31,3 +34,10 @@ spec:
                 name: file-service
                 port:
                   number: 11000
+          - path: /communication/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: communication-service
+                port:
+                  number: 15000
