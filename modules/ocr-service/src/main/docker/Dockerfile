@@ -10,6 +10,7 @@ RUN curl https://github.com/tesseract-ocr/tessdata/blob/master/srp.traineddata >
 RUN curl https://github.com/tesseract-ocr/tessdata/blob/master/srp_latn.traineddata > /tessdata/srp_latn.traineddata
 
 RUN apt-get update && apt-get install tesseract-ocr -y
+RUN TESSDATA_PREFIX=/tessdata
 
 WORKDIR /app
 
