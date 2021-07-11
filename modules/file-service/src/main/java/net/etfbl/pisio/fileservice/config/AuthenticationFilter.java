@@ -36,6 +36,7 @@ public class AuthenticationFilter extends HttpFilter {
             return;
         }
 
+        request.setAttribute("pisio-username", username);
         chain.doFilter(request, response);
     }
 
