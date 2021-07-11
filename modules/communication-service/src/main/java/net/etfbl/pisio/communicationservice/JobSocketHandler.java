@@ -8,18 +8,18 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
 @AllArgsConstructor
-public class WebSocketHandler extends TextWebSocketHandler {
+public class JobSocketHandler extends TextWebSocketHandler {
 
     private final UsernameSessionService usernameSessionService;
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(WebSocketSession session) {
         String username = getSessionUser(session);
         usernameSessionService.addUserSession(username, session);
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
        String username = getSessionUser(session);
        usernameSessionService.deleteUserSession(username);
     }

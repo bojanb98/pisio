@@ -38,7 +38,7 @@ public class FileAccessController {
     @ResponseBody
     public Resource downloadFile(@RequestBody @Validated FileJob fileJob,
                                  @RequestAttribute("pisio-username") @NotNull @NotBlank String username) {
-        UserJob userJob = userJobService.getByJobId(username);
+        UserJob userJob = userJobService.getByJobId(fileJob.getJobId());
         if (userJob == null || !username.equals(userJob.getUsername())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

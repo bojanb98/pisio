@@ -11,7 +11,6 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.io.IOException;
@@ -26,12 +25,12 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     private static final String WEBSOCKET_TICKET_HEADER = "sec-websocket-protocol";
 
     private final TokenValidationService tokenValidationService;
-
+    private final UsernameSessionService usernameSessionService;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
-                .addHandler(new TextWebSocketHandler(), "/ws")
+                .addHandler(new JobSocketHandler(usernameSessionService), "/ws")
                 .addInterceptors(handshakeInterceptor())
                 .setAllowedOrigins("*");
     }
@@ -39,7 +38,6 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     @Bean
     public HandshakeInterceptor handshakeInterceptor() {
         return new HandshakeInterceptor() {
-
 
             @Override
             public boolean beforeHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws IOException {
@@ -53,7 +51,6 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
                 if (username == null) {
                     return false;
                 }
-
 
                 map.put("username", username);
                 serverHttpResponse.getHeaders().add(WEBSOCKET_TICKET_HEADER, tickets.get(0));
