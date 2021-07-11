@@ -6,6 +6,7 @@ kubectl apply -f file-service.yml
 kubectl apply -f ocr-service.yml
 kubectl apply -f gif-service.yml
 kubectl apply -f pdf-service.yml
+kubectl apply -f communication-service.yml
 
 # Ingress
 kubectl apply -f ingress-config.yml

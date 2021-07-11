@@ -16,3 +16,13 @@ spring:
     bootstrap-servers: pop-os.localdomain:9092
   session:
     timeout: 3600s
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  kafka:
+    bootstrap-servers: my-cluster-kafka-bootstrap.kafka:9092
+  redis:
+    host: pisio-redis
