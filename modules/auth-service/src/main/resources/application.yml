@@ -14,7 +14,7 @@ spring:
 
 jwt:
   secret: 9Xk*2*N!U&36gvYT4!
-  validity: 600000
+  validity: 3600
 
 ---
 spring:
