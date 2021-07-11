@@ -2,7 +2,9 @@ package net.etfbl.pisio.fileservice.api;
 
 import lombok.AllArgsConstructor;
 import net.etfbl.pisio.fileservice.model.FileJob;
+import net.etfbl.pisio.fileservice.model.FileWriteStatus;
 import net.etfbl.pisio.fileservice.service.FileAccessService;
+import net.etfbl.pisio.fileservice.service.FileWriteStatusService;
 import net.etfbl.pisio.fileservice.service.FileZipService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -21,12 +23,19 @@ import java.nio.file.Path;
 @CrossOrigin(origins = "*")
 public class FileAccessController {
 
+    private static final int NUM_TOTAL_JOB = 2;
+
     private final FileAccessService fileAccessService;
     private final FileZipService fileZipService;
+    private final FileWriteStatusService fileWriteStatusService;
 
     @PostMapping("/download")
     @ResponseBody
     public Resource downloadFile(@RequestBody @Validated FileJob fileJob) {
+        FileWriteStatus writeStatus = fileWriteStatusService.getWriteStatusByJob(fileJob.getJobId());
+        if (writeStatus == null || writeStatus.getNumFilesWritten() < NUM_TOTAL_JOB) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
         Path zipFilePath = fileZipService.getZippedResults(fileJob.getJobId());
         return new FileSystemResource(zipFilePath);
     }
