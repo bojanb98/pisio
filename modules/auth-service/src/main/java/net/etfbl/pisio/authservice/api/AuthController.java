@@ -9,14 +9,12 @@ import net.etfbl.pisio.authservice.service.JwtService;
 import net.etfbl.pisio.authservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final UserService userService;

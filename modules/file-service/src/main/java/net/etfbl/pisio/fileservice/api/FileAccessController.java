@@ -18,6 +18,7 @@ import java.nio.file.Path;
 @RestController
 @RequestMapping("/file")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class FileAccessController {
 
     private final FileAccessService fileAccessService;
