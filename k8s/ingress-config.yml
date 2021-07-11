@@ -8,10 +8,10 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/secure-backends: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
     ngnix.ingress.kubernetes.io/cors-allow-origin: "*"
-    ngnix.ingress.kubernetes.io/cors-allow-methods: POST, GET
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
 spec:
   rules:
     - http:

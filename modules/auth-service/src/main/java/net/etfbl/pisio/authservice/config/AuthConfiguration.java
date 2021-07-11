@@ -23,6 +23,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .headers().frameOptions().sameOrigin()
+                .and()
                 .logout().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
@@ -33,4 +35,5 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(NUM_ENCODER_ROUNDS);
     }
+
 }
