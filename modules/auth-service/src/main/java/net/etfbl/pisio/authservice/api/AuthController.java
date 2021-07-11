@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.OPTIONS})
 public class AuthController {
 
     private final UserService userService;
