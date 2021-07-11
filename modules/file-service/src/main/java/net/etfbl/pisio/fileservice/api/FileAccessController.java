@@ -37,7 +37,12 @@ public class FileAccessController {
 
     @PostMapping("/download")
     @ResponseBody
-    public Resource downloadFile(@RequestBody @Validated FileJob fileJob) {
+    public Resource downloadFile(@RequestBody @Validated FileJob fileJob,
+                                 @RequestAttribute("pisio-username") @NotNull @NotBlank String username) {
+        UserJobs userJobs = userJobsService.getUserJobsByUsername(username);
+        if (userJobs == null || !userJobs.getJobIds().contains(fileJob.getJobId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         FileWriteStatus writeStatus = fileWriteStatusService.getWriteStatusByJob(fileJob.getJobId());
         if (writeStatus == null || writeStatus.getNumFilesWritten() < NUM_TOTAL_JOB) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);
