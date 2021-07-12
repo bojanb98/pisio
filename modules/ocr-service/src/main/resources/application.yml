@@ -25,4 +25,4 @@ spring:
     bootstrap-servers: my-cluster-kafka-bootstrap.kafka:9092
 
 tesseract:
-  datapath: /tessdata
+  datapath: /usr/share/tesseract-ocr/4.00/tessdata

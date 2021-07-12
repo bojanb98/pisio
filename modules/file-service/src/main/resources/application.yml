@@ -30,6 +30,6 @@ spring:
   kafka:
     bootstrap-servers: my-cluster-kafka-bootstrap.kafka:9092
   redis:
-    host: pisio-redis-service
+    host: pisio-redis-service.default.svc.cluster.local
 files:
   path: /images
