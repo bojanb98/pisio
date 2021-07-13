@@ -4,11 +4,10 @@ import lombok.*;
 
 import java.util.List;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
-@ToString
 public class StringJobData {
 
     private String jobId;

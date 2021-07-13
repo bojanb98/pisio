@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,9 +15,9 @@ public class OcrService {
 
     private final Tesseract tesseract;
 
-    public OcrService() {
+    public OcrService(TesseractProperties tesseractProperties) {
         tesseract = new Tesseract();
-        tesseract.setDatapath(Objects.requireNonNull(OcrService.class.getResource("tessdata")).getPath());
+        tesseract.setDatapath(tesseractProperties.getDatapath());
         tesseract.setLanguage("eng");
         tesseract.setPageSegMode(1);
         tesseract.setOcrEngineMode(1);

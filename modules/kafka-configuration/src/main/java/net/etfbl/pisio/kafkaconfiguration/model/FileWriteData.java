@@ -2,11 +2,10 @@ package net.etfbl.pisio.kafkaconfiguration.model;
 
 import lombok.*;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
-@ToString
 public class FileWriteData {
 
     private String jobId;
@@ -14,4 +13,10 @@ public class FileWriteData {
     private String fileName;
 
     private byte[] data;
+
+    private JobPart jobPart;
+
+    public enum JobPart {
+        PDF, GIF
+    }
 }

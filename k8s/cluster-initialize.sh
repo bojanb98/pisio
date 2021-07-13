@@ -8,6 +8,9 @@ kubectl apply -f storage/mysql-storage.yml
 kubectl apply -f db/mysql-service.yml
 kubectl apply -f db/adminer.yml
 
+# Redis
+kubectl apply -f redis-service.yml
+
 # Kafka
 kubectl create namespace kafka
 kubectl apply -f kafka/kafka-strimzi-init.yml -n  kafka

@@ -13,6 +13,9 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     bootstrap-servers: pop-os.localdomain:9092
 
+tesseract:
+  datapath: ${user.home}/Desktop/tessdata
+
 ---
 spring:
   config:
@@ -20,3 +23,6 @@ spring:
       on-profile: docker
   kafka:
     bootstrap-servers: my-cluster-kafka-bootstrap.kafka:9092
+
+tesseract:
+  datapath: /usr/share/tesseract-ocr/4.00/tessdata

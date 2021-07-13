@@ -26,11 +26,13 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .logout().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .rememberMe().disable();
+                .rememberMe().disable()
+                .authorizeRequests().anyRequest().permitAll();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(NUM_ENCODER_ROUNDS);
     }
+
 }

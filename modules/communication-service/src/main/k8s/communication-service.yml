@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: communication-service
+  namespace: ${k8s.namespace}
+spec:
+  selector:
+    app: communication-service
+  ports:
+    - port: 15000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: communication-service
+  namespace: ${k8s.namespace}
+  labels:
+    app: communication-service
+spec:
+  replicas: ${communication-service.replicas}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: communication-service
+  template:
+    metadata:
+      labels:
+        app: communication-service
+    spec:
+      containers:
+        - name: communication-service
+          image: "${docker.image.name}:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 15000
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "${spring.profiles.active}"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 15000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+            successThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 15000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - mountPath: /images
+              name: communication-service-persistent-storage
+      volumes:
+        - name: communication-service-persistent-storage
+          persistentVolumeClaim:
+            claimName: music-pv-claim

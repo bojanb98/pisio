@@ -2,8 +2,10 @@ FROM adoptopenjdk/openjdk11
 
 COPY maven /app
 
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install -y tesseract-ocr
+RUN apt-get install -y tesseract-ocr-srp tesseract-ocr-bos tesseract-ocr-srp-latn
 
-RUN apt-get update && apt-get install tesseract-ocr -y
+WORKDIR /app
 
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=${spring.profiles.active}", "${project.artifactId}-${project.version}.jar"]

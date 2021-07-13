@@ -2,6 +2,7 @@ package net.etfbl.pisio.ocrservice;
 
 import lombok.AllArgsConstructor;
 import net.etfbl.pisio.kafkaconfiguration.model.ImageJobData;
+import net.etfbl.pisio.kafkaconfiguration.model.JobStatusData;
 import net.etfbl.pisio.kafkaconfiguration.model.StringJobData;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +20,29 @@ import java.util.List;
 public class OcrKafkaHandler {
 
     private final OcrService ocrService;
-    private final KafkaTemplate<String, StringJobData> kafkaTemplate;
+    private final KafkaTemplate<String, StringJobData> pdfKafkaTemplate;
+    private final KafkaTemplate<String, JobStatusData> statusKafkaTemplate;
 
     @KafkaListener(topics = "images", groupId = "ocr")
     public void handleImages(ImageJobData imageJobData) {
+        JobStatusData jobStatusData = JobStatusData.builder()
+                .jobId(imageJobData.getJobId())
+                .jobPart(JobStatusData.JobPart.OCR)
+                .partStatus(JobStatusData.PartStatus.IN_PROGRESS)
+                .build();
+        statusKafkaTemplate.send("jobStatus", jobStatusData);
         List<String> result = ocrService.doOcr(imageJobData.getImagesBytes());
-        StringJobData stringJobData = new StringJobData(imageJobData.getJobId(), result);
-        kafkaTemplate.send("pdf", stringJobData);
+        StringJobData stringJobData = StringJobData.builder()
+                .jobId(imageJobData.getJobId())
+                .imagesText(result)
+                .build();
+        pdfKafkaTemplate.send("pdf", stringJobData);
+        jobStatusData = JobStatusData.builder()
+                .jobId(imageJobData.getJobId())
+                .jobPart(JobStatusData.JobPart.OCR)
+                .partStatus(JobStatusData.PartStatus.DONE)
+                .build();
+        statusKafkaTemplate.send("jobStatus", jobStatusData);
     }
 
     @Bean

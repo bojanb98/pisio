@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import net.etfbl.pisio.authfilter.TokenValidationService;
 import org.springframework.http.HttpHeaders;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,12 +29,14 @@ public class AuthenticationFilter extends HttpFilter {
         }
 
         String tokenValue = authorizationHeader.substring(PREFIX_LENGTH).trim();
+        String username = tokenValidationService.validateToken(tokenValue);
 
-        if (!tokenValidationService.isTokenValid(tokenValue)) {
+        if (username == null) {
             abortWithUnauthorized(response);
             return;
         }
 
+        request.setAttribute("pisio-username", username);
         chain.doFilter(request, response);
     }
 
