@@ -12,4 +12,5 @@ Project modules:
   7. ocr-service - performs Optical Character Recognition on multiple images
   8. pdf-service - creates PDF files from strings created by ocr-service
   9. swagger-configuration - reusable pacckage enabling automatic Swagger configuration
+
 Modules gif-service, ocr-service and pdf-serice are using Kafka for consuming their inputs and for pushing their outputs back to the system. These services are also sending special data through Kafka to communication service to provide users with job progess data.
