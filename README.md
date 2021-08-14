@@ -1,6 +1,6 @@
 # pisio
 
-University project for distributed image processing. Project is consisted of several microservices and is meant to be deployed on Kubernetes.
+University project for distributed image processing. Project is consisted of several microservices and is meant to be deployed on Kubernetes. Platform can easily be initialized on new Kubernetes cluster by running bash scripts in k8s folder called cluster-initialize.sh and services-initialize.sh
 
 Project modules:
   1. auth-filter - reusable package enabling other services to implement JWT token validation through communication with authentication service
